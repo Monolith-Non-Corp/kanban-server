@@ -1,0 +1,22 @@
+server: 
+  port: ${PORT:9010}
+
+keycloak-env:
+  base-url: http://localhost:8080/auth
+  realm: kanban
+  realm-url: ${keycloak-env.base-url}/realms/${keycloak-env.realm}
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:9000}/kanban
+    username: admin
+    password: password
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak-env.realm-url}
+          jwk-set-uri: ${keycloak-env.realm-url}/protocol/openid-connect/certs
